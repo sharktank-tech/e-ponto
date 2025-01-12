@@ -3,7 +3,7 @@ from web.modules.models import db, Ponto
 import logging
 
 # Configurar o logging
-logging.basicConfig(filename='error.log', level=logging.ERROR)
+# logging.basicConfig(filename='error.log', level=logging.ERROR)
 
 def verificar_se_pode_registrar(user_id):
     """

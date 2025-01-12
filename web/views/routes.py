@@ -12,7 +12,7 @@ from web.modules.enviar_email import enviar_email
 main_blueprint = Blueprint('main', __name__)
 
 # Configurar o logging
-logging.basicConfig(filename='error.log', level=logging.ERROR)
+# logging.basicConfig(filename='error.log', level=logging.ERROR)
 
 @main_blueprint.route('/')
 @login_required
