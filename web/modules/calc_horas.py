@@ -2,7 +2,6 @@ from datetime import datetime
 import logging
 from collections import defaultdict
 from flask_login import current_user
-from sqlalchemy.orm import sessionmaker
 from web.modules.models import Ponto
 from web import db  # Substitua pelo contexto correto do banco de dados
 
