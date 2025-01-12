@@ -1,0 +1,100 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f1f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Container do Registro */
+.container {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Título do Registro */
+.container h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #151F30;
+}
+
+/* Formulário */
+.container form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.container form label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs */
+.container form input[type="text"],
+.container form input[type="email"],
+.container form input[type="password"] {
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #2483ff;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: calc(100% - 22px);
+}
+
+/* Botão de Submit */
+.container form input[type="submit"] {
+  background-color: #1c58e3;
+  color: #ffffff;
+  border: none;
+  padding: 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover no Botão de Submit */
+.container form input[type="submit"]:hover {
+  background-color: #2217ba;
+  transform: scale(1.05);
+}
+
+/* Link para Login */
+.container p {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.container p a {
+  color: #E3371E;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.container p a:hover {
+  color: #C62828;
+}

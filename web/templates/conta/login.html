@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="static/css/login.css">
+    <link rel="icon" href="static/images/soco-relogio.png">
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+
+  <!-- mensagens flash -->
+  <div class="fixed top-0 left-0 w-full z-50">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="flash-message" class="bg-gray-500 text-white py-2 max-w-md mx-auto rounded-lg">
+          {% for category, message in messages %}
+            <div class="text-center">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Script para setar a duração das menssagens -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var flashMessage = document.getElementById('flash-message');
+    if (flashMessage) {
+      setTimeout(function() {
+        flashMessage.style.transition = 'opacity 0.5s ease-out';
+        flashMessage.style.opacity = '0';
+
+        // Remove o elemento após a transição
+        flashMessage.addEventListener('transitionend', function() {
+          flashMessage.remove();
+        });
+      }, 3000); // Mensagem desaparecerá após 3 segundos
+    }
+  });
+  </script>
+
+    <div class="login-container bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">Login</h2>
+        <form method="post" class="space-y-4">
+            <div>
+                <label for="email" class="block text-gray-700">Email:</label>
+                <input type="email" id="email" name="email" required class="w-full p-2 border border-gray-300 rounded mt-1">
+            </div>
+            <div>
+                <label for="senha" class="block text-gray-700">Senha:</label>
+                <input type="password" id="senha" name="senha" required class="w-full p-2 border border-gray-300 rounded mt-1">
+            </div>
+            <input type="submit" value="Login" class="w-full bg-red-600 text-white p-2 rounded mt-4 hover:bg-red-700 cursor-pointer">
+        </form>
+        <p class="mt-4 text-center">
+            <a href="/register" class="text-red-600 hover:underline">Registrar</a>
+        </p>
+    </div>
+
+</body>
+</html>
