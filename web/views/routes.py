@@ -157,22 +157,92 @@ def conta():
     # Redireciona para a página inicial em caso de erro
     return redirect(url_for('main.home'))
 
+# Rota para editar conta
+@main_blueprint.route('/edit_account', methods=['GET', 'POST'])
+@login_required
+def editar_conta():
+    if request.method == 'POST':
+        # Obtem os novos dados do formulário
+        new_username = request.form.get('username')
+        new_email = request.form.get('email')
+
+        # Valida os dados e atualiza o usuário
+        if new_username and new_email:
+            current_user.username = new_username
+            current_user.email = new_email
+            db.session.commit()
+            flash('Informações atualizadas com sucesso!', 'success')
+            return redirect(url_for('main.conta'))
+        else:
+            flash('Por favor, preencha todos os campos.', 'danger')
+
+    # Exibe o formulário com os dados atuais do usuário
+    return render_template('conta/editar_conta.html', username=current_user.username, email=current_user.email)
+
+
+# Rota para deletar conta
+@main_blueprint.route('/delete_account', methods=['POST'])
+@login_required
+def deletar_conta():
+    try:
+        # Remove o usuário atual do banco de dados
+        db.session.delete(current_user)
+        db.session.commit()
+        flash('Conta excluída com sucesso!', 'success')
+        return redirect(url_for('auth.login'))  # Redireciona para a página de login
+    except Exception as e:
+        flash('Ocorreu um erro ao tentar excluir a conta. Tente novamente.', 'danger')
+        return redirect(url_for('main.conta'))
 
 # Rota pro envio do relatorio
 @main_blueprint.route('/relatorio')
 @login_required
 def relatorio():
     try:
+        user = current_user
         destinatario = current_user.email
         if not destinatario:
             flash("E-mail do usuário não encontrado.", "danger")
             return redirect(url_for('main.home'))
 
         assunto = 'Relatório'
-        corpo = "dados"
+        pontos = db.session.query(Ponto).filter(Ponto.user_id == user.id).all()
+
+        # Gerar o corpo do e-mail com os dados de pontos
+        corpo = ""
+        for ponto in pontos:
+            corpo += f"""
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{ponto.entrada}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{ponto.pausa}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{ponto.retorno}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{ponto.saida}</td>
+                </tr>
+            """
+
+            # Criar o corpo completo do e-mail com cabeçalho HTML
+            corpo_email = f"""
+            <html>
+                <body>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;">Entrada</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;">Pausa</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;">Retorno</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #f2f2f2; text-align: left;">Saída</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {corpo}
+                        </tbody>
+                    </table>
+                </body>
+            </html>
+            """
 
         # Enviar e-mail
-        enviar_email(destinatario, assunto, corpo)
+        enviar_email(destinatario, assunto, corpo_email)
         flash("Relatório enviado com sucesso!", "success")
 
         return redirect(url_for('main.home'))
@@ -188,13 +258,14 @@ def relatorio():
 @login_required
 def registrar_ponto():
 
-    user_id = current_user.username
+    user_id = current_user.id
+    print(f"user id={user_id}")
 
     # Verificar se o usuário já atingiu o limite de marcações para hoje
     if verifica_limite_marcacoes(user_id):
         flash('Você já atingiu o limite de marcações para hoje.', 'warning')
         logging.info(f'Usuário {user_id} já atingiu o limite de marcações para hoje.')
-        return redirect(url_for('index'))
+        return redirect(url_for('main.home'))
 
     try:
         # Recuperar o ponto atual do usuário usando SQLAlchemy

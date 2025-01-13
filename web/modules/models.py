@@ -22,7 +22,7 @@ class Ponto(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    entrada = db.Column(db.String(100), nullable=False)
-    pausa = db.Column(db.String(100), nullable=False)
-    retorno = db.Column(db.String(100), nullable=False)
-    saida = db.Column(db.String(100), nullable=False)
+    entrada = db.Column(db.String(100))
+    pausa = db.Column(db.String(100))
+    retorno = db.Column(db.String(100))
+    saida = db.Column(db.String(100))
