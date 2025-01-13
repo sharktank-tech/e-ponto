@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ponto Eletronico</title>
+    <title>Ponto Eletrônico</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='images/soco-relogio.png') }}">
     <link rel="stylesheet" href="static/css/index.css">
@@ -12,43 +12,50 @@
     <!-- Navbar -->
     <nav class="bg-white shadow-md">
         <div class="container mx-auto px-4 py-2 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-red-600">Ponto Eletronico</h1>
-            <ul class="flex space-x-4">
-                <li><a href="logout" onclick="showHome()" class="text-gray-700 hover:text-red-600">Sair</a></li>
-                <li><a href="/" onclick="showHome()" class="text-gray-700 hover:text-red-600">Home</a></li>
+            <h1 class="text-xl font-bold text-red-600">Ponto Eletrônico</h1>
+            <button id="menu-toggle" class="md:hidden text-gray-700 hover:text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <ul id="menu" class="hidden md:flex space-x-4">
+                {% if admin == 1 %}
+                <li><a href="{{ url_for('admin.admin_dashboard') }}" class="text-gray-700 hover:text-red-600">Admin</a></li>
+                {% endif %}
+                <li><a href="/" class="text-gray-700 hover:text-red-600">Home</a></li>
+                <li><a href="logout" class="text-gray-700 hover:text-red-600">Sair</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main id="main-content" class="flex-grow container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">Bem-vindo, {{ user.username }}!</h2>
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <h2 class="text-xl font-bold text-gray-700 mb-4">Bem-vindo, {{ user.username }}!</h2>
         <div class="bg-white p-4 rounded shadow-md">
-            <h3 class="text-xl font-bold text-gray-700 mb-2">Horas Trabalhadas</h3>
+            <h3 class="text-lg font-bold text-gray-700 mb-2">Horas Trabalhadas</h3>
             <p class="text-gray-700">Horas trabalhadas: {{ horas_trabalhadas }}</p>
             <p class="text-gray-700">Salário: R$ {{ salario }}</p>
-            <h3 class="text-xl font-semibold mt-6 mb-2">Ações</h3>
-            <a href="{{ url_for('main.editar_conta') }}" class="text-blue-600 hover:underline">Editar Conta</a>
-            <br>
-            <form action="{{ url_for('main.deletar_conta') }}" method="POST" class="mt-2">
-                <button type="submit" class="text-red-600 hover:underline">Excluir Conta</button>
-            </form>
+            <div class="mt-4">
+                <a href="{{ url_for('main.editar_conta') }}" class="text-blue-600 hover:underline">Editar Conta</a>
+                <form action="{{ url_for('main.deletar_conta') }}" method="POST" class="mt-2">
+                    <button type="submit" class="text-red-600 hover:underline">Excluir Conta</button>
+                </form>
+            </div>
         </div>
 
         <!-- Relatório Section -->
-        <div class="bg-white p-4 rounded shadow-md mb-4">
-            <h3 class="text-xl font-bold text-gray-700 mb-2">Relatório</h3>
-            <a href="/relatorio" class="text-gray-700 hover:text-red-600">Enviar relatório para o email: {{user.email}}</a>
+        <div class="bg-white p-4 rounded shadow-md mt-6">
+            <h3 class="text-lg font-bold text-gray-700 mb-2">Relatório</h3>
+            <a href="/relatorio" class="text-gray-700 hover:text-red-600">Enviar relatório para o email: {{ user.email }}</a>
         </div>
 
         <!-- Tabela de Marcação de Ponto -->
-        <div class="bg-white p-4 rounded shadow-md">
-            <h3 class="text-xl font-bold text-gray-700 mb-2">Minhas Marcações de Ponto</h3>
-            <!-- Usar rolagem horizontal para telas pequenas -->
+        <div class="bg-white p-4 rounded shadow-md mt-6">
+            <h3 class="text-lg font-bold text-gray-700 mb-2">Minhas Marcações de Ponto</h3>
             <div class="overflow-x-auto">
-                <table class="min-w-full table-auto">
+                <table class="min-w-full table-auto text-sm">
                     <thead>
-                        <tr>
+                        <tr class="bg-gray-200 text-gray-700">
                             <th class="px-4 py-2 text-left">Entrada</th>
                             <th class="px-4 py-2 text-left">Pausa</th>
                             <th class="px-4 py-2 text-left">Retorno</th>
@@ -57,16 +64,16 @@
                     </thead>
                     <tbody>
                         {% for ponto in pontos %}
-                            <tr>
-                                <td class="border px-4 py-2">{{ ponto.entrada }}</td>
-                                <td class="border px-4 py-2">{{ ponto.pausa }}</td>
-                                <td class="border px-4 py-2">{{ ponto.retorno }}</td>
-                                <td class="border px-4 py-2">{{ ponto.saida }}</td>
-                            </tr>
+                        <tr>
+                            <td class="border px-4 py-2">{{ ponto.entrada }}</td>
+                            <td class="border px-4 py-2">{{ ponto.pausa }}</td>
+                            <td class="border px-4 py-2">{{ ponto.retorno }}</td>
+                            <td class="border px-4 py-2">{{ ponto.saida }}</td>
+                        </tr>
                         {% else %}
-                            <tr>
-                                <td colspan="4" class="border px-4 py-2 text-center">Nenhuma marcação encontrada.</td>
-                            </tr>
+                        <tr>
+                            <td colspan="4" class="border px-4 py-2 text-center">Nenhuma marcação encontrada.</td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -76,11 +83,16 @@
 
     <!-- Footer -->
     <footer class="bg-white py-4 shadow-inner">
-        <div class="container mx-auto px-4 text-center">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-600">
+            © 2024 Ponto Eletrônico. Todos os direitos reservados.
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="static/scripts/index.js"></script>
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

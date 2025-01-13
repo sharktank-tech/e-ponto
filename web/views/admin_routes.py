@@ -4,17 +4,14 @@ from flask_login import login_required, logout_user, current_user
 
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates/admin')
 
-
 # Rota principal do painel de administração
 @admin_blueprint.route('/admin')
 @login_required
 def admin_dashboard():
-    products = Ponto.query.all()
     users = Users.query.all()
-    return render_template('admin/dashboard.html', products=products, users=users)
+    return render_template('admin/admin.html', users=users)
 
-
-# Gerenciamento de Usuários
+# Adicionar usuário
 @admin_blueprint.route('/admin/users/add', methods=['GET', 'POST'])
 @login_required
 def add_user():
@@ -32,6 +29,7 @@ def add_user():
 
     return render_template('admin/add_user.html')
 
+# Excluir usuário
 @admin_blueprint.route('/admin/users/delete/<int:id>', methods=['POST'])
 @login_required
 def delete_user(id):
@@ -41,10 +39,25 @@ def delete_user(id):
     flash('Usuário excluído com sucesso!', 'success')
     return redirect(url_for('admin.admin_dashboard'))
 
-
-@admin_blueprint.route('/logout', methods=['POST'])
+# Editar usuário
+@admin_blueprint.route('/admin/users/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
-def logout():
-    logout_user()
-    flash("Logout bem-sucedido!", "success")
-    return redirect(url_for('main.login'))
+def edit_user(id):
+    user = Users.query.get_or_404(id)
+
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form.get('password')
+
+        # Atualizar os campos do usuário
+        user.username = username
+        user.email = email
+        if password:  # Atualizar a senha somente se fornecida
+            user.set_password(password)
+
+        db.session.commit()
+        flash('Usuário atualizado com sucesso!', 'success')
+        return redirect(url_for('admin.admin_dashboard'))
+
+    return render_template('admin/edit_user.html', user=user)

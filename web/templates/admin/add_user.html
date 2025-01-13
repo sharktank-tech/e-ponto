@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adicionar Usuário</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animation.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/soco-relogio.png') }}">
+</head>
+<body class="bg-gray-100">
+
+  <!-- Navbar -->
+  <nav class="bg-black text-white px-4 py-2 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Painel Administrativo</h1>
+    <ul class="flex gap-4">
+      <li><a href="/" class="hover:underline">Home</a></li>
+      <li><a href="{{ url_for('main.logout') }}" class="hover:underline">Sair</a></li>
+    </ul>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <main class="mt-6 px-4 max-w-2xl mx-auto bg-white p-6 rounded shadow">
+    <h1 class="text-2xl font-bold mb-6">Adicionar Usuário</h1>
+
+    <form action="{{ url_for('admin.add_user') }}" method="post" class="space-y-4">
+      <div>
+        <label for="username" class="block text-lg font-semibold">Nome de Usuário</label>
+        <input type="text" id="username" name="username" class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Digite o nome do usuário" required>
+      </div>
+
+      <div>
+        <label for="email" class="block text-lg font-semibold">Email</label>
+        <input type="email" id="email" name="email" class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Digite o email do usuário" required>
+      </div>
+
+      <div>
+        <label for="password" class="block text-lg font-semibold">Senha</label>
+        <input type="password" id="password" name="password" class="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Digite a senha" required>
+      </div>
+
+      <div class="flex justify-end">
+        <button type="submit" class="bg-black text-white py-2 px-4 rounded hover:bg-gray-800">Adicionar</button>
+      </div>
+    </form>
+  </main>
+
+</body>
+</html>
