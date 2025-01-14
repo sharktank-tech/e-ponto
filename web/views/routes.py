@@ -17,12 +17,23 @@ logging.basicConfig(level=logging.ERROR)
 @main_blueprint.route('/')
 @login_required
 def home():
-    # Busca os dados do ponto do usuário atual
-    point_data = Ponto.query.filter_by(user_id=current_user.id).first()
-    print(f"corrent user={current_user}")
-    print(f"point data={point_data}")
-
+    # Obtém a data de hoje no formato 'DD/MM/YYYY'
     hoje = obter_data_hora_br()
+    print(f'hoje={hoje}')
+
+    # Busca os dados do ponto do usuário atual filtrando pela data de hoje
+    point_data = Ponto.query.filter(
+        Ponto.user_id == current_user.id,
+        db.or_(
+            db.func.substr(Ponto.entrada, 1, 10) == hoje,
+            db.func.substr(Ponto.pausa, 1, 10) == hoje,
+            db.func.substr(Ponto.retorno, 1, 10) == hoje,
+            db.func.substr(Ponto.saida, 1, 10) == hoje
+        )
+    ).first()
+
+    print(f"current user={current_user}")
+    print(f"point data={point_data}")
 
     # Formatar os dados do ponto
     formatted_point_data = {
