@@ -322,7 +322,7 @@ def registrar_ponto():
         logging.info(f'{tipo_registro.capitalize()} registrada com sucesso para o usuário {user_id}.')
     except Exception as e:
         logging.error(f'Erro ao registrar ponto para o usuário {user_id}: {e}, entrada={ponto_atual.entrada}')
-        flash('Erro ao registrar o ponto. Tente novamente mais tarde.', 'danger')
+        flash(f'Erro: {e} ao registrar o ponto. Tente novamente mais tarde.', 'danger')
 
     return redirect(url_for('main.home'))
 
