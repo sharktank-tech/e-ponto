@@ -133,12 +133,12 @@ def register():
     return render_template('conta/register.html')
 
 # Rota pra a pagna da conta
-@main_blueprint.route('/conta')
+@main_blueprint.route('/conta',  methods=['GET', 'POST'])
 @login_required
 def conta():
     try:
         # Recupera o usuário logado
-        user = current_user  # Mantenha o objeto 'user' como o 'current_user' inteiro
+        user = current_user
         horas_trabalhadas, salario = calcular_horas_salario(user.id)
 
         # Verifica se o objeto 'user' contém os atributos esperados
