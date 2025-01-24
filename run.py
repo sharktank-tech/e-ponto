@@ -1,6 +1,8 @@
 from web import create_app
 from web.modules.models import db
+import os
 
+os.environ["FLASK_APP"] = "run"
 app = create_app()
 
 if __name__ == '__main__':
