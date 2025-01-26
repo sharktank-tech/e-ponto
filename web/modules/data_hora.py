@@ -10,3 +10,6 @@ def formato_brasileiro():
 
 def obter_data_hora_br():
     return datetime.now(fuso_horario_br).strftime('%d/%m/%Y')
+
+def data_hora_br_registro():
+    return datetime.now(fuso_horario_br).strftime('%d/%m/%Y %H:%M:%S')

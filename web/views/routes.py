@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, session, flash, request, Blueprint
 from flask_login import login_required, current_user, login_user, logout_user
 from web.modules.models import db, Ponto, Users
-from web.modules.data_hora import obter_data_hora_br, formato_brasileiro
+from web.modules.data_hora import obter_data_hora_br, formato_brasileiro, data_hora_br_registro
 from web.modules.can_register import verificar_se_pode_registrar, verifica_limite_marcacoes
 from werkzeug.security import check_password_hash
 from sqlalchemy.exc import IntegrityError
@@ -305,7 +305,7 @@ def registrar_ponto():
             return redirect(url_for('index'))
 
         # Registrar o horário atual no campo correspondente
-        data_hora_registro = formato_brasileiro()  # Supondo que retorna 'DD/MM/YYYY HH:MM:SS'
+        data_hora_registro = data_hora_br_registro()  # Supondo que retorna 'DD/MM/YYYY HH:MM:SS'
         print(f"data_hora_registro:{data_hora_registro}")
         logging.info(f"Data e hora do registro: {data_hora_registro}")
 
