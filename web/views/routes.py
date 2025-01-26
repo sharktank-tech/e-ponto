@@ -12,7 +12,8 @@ from web.modules.enviar_email import enviar_email
 main_blueprint = Blueprint('main', __name__)
 
 # Configurar o logging
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(filename='debug.log',level=logging.INFO,
+        format='%(asctime)s [%(levelname)s] (%(threadName)-10s) %(message)s')
 
 @main_blueprint.route('/')
 @login_required
@@ -32,7 +33,7 @@ def home():
         )
     ).first()
 
-    print(f"current user={current_user}")
+    print(f"current user={current_user.username}")
     print(f"point data={point_data}")
 
     # Formatar os dados do ponto
@@ -51,6 +52,8 @@ def home():
 
     # Verificar se o usuário pode registrar
     can_register = verificar_se_pode_registrar(current_user.id) and not all_registered_today
+
+    print(f"formated_point_data:{formatted_point_data}")
 
     return render_template(
         'main/index.html',
@@ -303,6 +306,7 @@ def registrar_ponto():
 
         # Registrar o horário atual no campo correspondente
         data_hora_registro = formato_brasileiro()  # Supondo que retorna 'DD/MM/YYYY HH:MM:SS'
+        print(f"data_hora_registro:{data_hora_registro}")
         logging.info(f"Data e hora do registro: {data_hora_registro}")
 
         # Atualizar o registro de ponto no banco de dados
