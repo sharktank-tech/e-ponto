@@ -10,133 +10,133 @@
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
-  <!-- mensagens flash -->
+  <!-- Mensagens flash -->
   <div class="fixed top-0 left-0 w-full z-50">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <div id="flash-message" class="bg-green-500 text-white py-2 max-w-md mx-auto rounded-lg">
+        <div id="flash-message" class="bg-green-500 text-white py-2 max-w-md mx-auto rounded-lg shadow-lg flex items-center justify-between">
           {% for category, message in messages %}
-            <div class="text-center">{{ message }}</div>
+            <div class="text-center w-full">{{ message }}</div>
           {% endfor %}
+          <button id="close-flash" class="text-white font-bold px-2">x</button>
         </div>
       {% endif %}
     {% endwith %}
   </div>
 
-  <!-- Script para setar a duração das menssagens -->
   <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var flashMessage = document.getElementById('flash-message');
-    if (flashMessage) {
-      setTimeout(function() {
-        flashMessage.style.transition = 'opacity 0.5s ease-out';
-        flashMessage.style.opacity = '0';
-
-        // Remove o elemento após a transição
-        flashMessage.addEventListener('transitionend', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+      var flashMessage = document.getElementById('flash-message');
+      var closeButton = document.getElementById('close-flash');
+      if (flashMessage && closeButton) {
+        closeButton.addEventListener('click', function() {
           flashMessage.remove();
         });
-      }, 3000); // Mensagem desaparecerá após 3 segundos
-    }
-  });
+      }
+    });
   </script>
 
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md">
+    <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-red-600">Ponto Eletrônico</h1>
+      <button id="nav-toggle" class="block md:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+      <ul id="nav-links" class="hidden md:flex space-x-4">
+        <li>
+          <a href="{{ url_for('main.conta') }}" class="text-gray-700 hover:text-red-600" aria-label="Link para a página Conta">Conta</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-red-600">Ponto Eletrônico</h1>
-            <ul class="flex space-x-4">
-                <li>
-                    <a href="{{ url_for('main.conta') }}" class="text-gray-700 hover:text-red-600" aria-label="Link para a página Conta">
-                        Conta
-                    </a>
-                </li>
-            </ul>
+  <script>
+    const navToggle = document.getElementById('nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('hidden');
+    });
+  </script>
+
+  <!-- Main Content -->
+  <main id="main-content" class="flex-grow container mx-auto px-4 py-8">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+
+      <!-- Informação sobre o novo dia -->
+      {% if is_new_day %}
+        <p class="text-green-600 font-semibold mb-4">Novo dia iniciado! Registros zerados.</p>
+      {% endif %}
+
+      <!-- Informações do usuário -->
+      <div class="mb-4">
+        <p class="text-lg font-bold">Nome: <span class="font-normal">{{ username }}</span></p>
+        <p class="text-lg font-bold">ID: <span class="font-normal">{{ user_id }}</span></p>
+      </div>
+
+      <!-- Labels para Point Data -->
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+        {% for label, data, color, image in [
+          ('Entrada', 'entrada', 'green-400', 'entrada.png'),
+          ('Pausa', 'pausa', 'blue-400', 'xicara-cheia.png'),
+          ('Retorno', 'retorno', 'yellow-400', 'xicara-vazia.png'),
+          ('Saída', 'saida', 'red-400', 'saida.png')
+        ] %}
+        <div class="text-center border border-gray-300 bg-{{ color | default('gray-400') }} p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+          <img src="{{ url_for('static', filename='images/' ~ image) }}" alt="Ícone de {{ label }}" class="w-12 h-12 mx-auto">
+          <div class="font-semibold mt-2">{{ label }}:</div>
+          <div>{{ point_data[data] if point_data[data] != 'Não registrado' else 'Não registrado' }}</div>
         </div>
-    </nav>
+        {% endfor %}
+      </div>
 
-    <!-- Main Content -->
-    <main id="main-content" class="flex-grow container mx-auto px-4 py-8">
-        <div class="bg-white p-6 rounded-lg shadow-md">
+      <!-- Relógio -->
+      <div id="clock" class="text-center text-2xl font-bold mb-6" aria-live="polite"></div>
 
-            <!-- Informação sobre o novo dia -->
-            {% if is_new_day %}
-                <p class="text-green-600 font-semibold mb-4">Novo dia iniciado! Registros zerados.</p>
-            {% endif %}
+      <!-- Botão para registrar ponto -->
+      <div class="text-center">
+        {% if can_register %}
+          <form id="registro-form" action="{{ url_for('main.registrar_ponto') }}" method="post">
+            <input type="hidden" name="tipo_registro" id="tipo_registro" value="entrada">
+            <input type="hidden" name="hora_registro" id="hora_registro">
+            <button type="submit" id="registrar-button" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none">
+              Registrar Entrada
+            </button>
+          </form>
+        {% else %}
+          <p class="text-red-600 font-semibold">Você atingiu o limite de registros para hoje.</p>
+        {% endif %}
+      </div>
+    </div>
+  </main>
 
-            <!-- Informações do usuário -->
-            <div class="mb-4">
-                <p class="text-lg font-bold">Nome: <span class="font-normal">{{ username }}</span></p>
-                <p class="text-lg font-bold">ID: <span class="font-normal">{{ user_id }}</span></p>
-            </div>
+  <!-- Footer -->
+  <footer class="bg-gray-800 py-4 shadow-inner text-white">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2024 Ponto Eletrônico. Todos os direitos reservados.</p>
+      <div class="mt-2">
+        <a href="#" class="hover:underline text-gray-300">Sobre</a> |
+        <a href="#" class="hover:underline text-gray-300">Política de Privacidade</a> |
+        <a href="#" class="hover:underline text-gray-300">Contato</a>
+      </div>
+    </div>
+  </footer>
 
-            <!-- Labels para Point Data -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-                {% for label, data, color, image in [
-                    ('Entrada', 'entrada', 'green-400', 'entrada.png'),
-                    ('Pausa', 'pausa', 'blue-400', 'xicara-cheia.png'),
-                    ('Retorno', 'retorno', 'yellow-400', 'xicara-vazia.png'),
-                    ('Saída', 'saida', 'red-400', 'saida.png')
-                ] %}
-                <div class="text-center bg-{{ color | default('gray-400') }} p-4 rounded-lg">
-                    <img src="{{ url_for('static', filename='images/' ~ image) }}" alt="Ícone de {{ label }}" class="w-12 h-12 mx-auto">
-                    <div class="font-semibold mt-2">{{ label }}:</div>
-                    <div>{{ point_data[data] if point_data[data] != 'Não registrado' else 'Não registrado' }}</div>
-                </div>
-                {% endfor %}
-            </div>
+  <!-- JavaScript -->
+  <script>
+    // Atualizar relógio
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+    }
 
-            <!-- Relógio -->
-            <div id="clock" class="text-center text-2xl font-bold mb-6" aria-live="polite"></div>
-
-            <!-- Botão para registrar ponto -->
-            <div class="text-center">
-                {% if can_register %}
-                    <form id="registro-form" action="{{ url_for('main.registrar_ponto') }}" method="post">
-                        <input type="hidden" name="tipo_registro" id="tipo_registro" value="entrada">
-                        <input type="hidden" name="hora_registro" id="hora_registro">
-                        <button type="submit" id="registrar-button" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none">
-                            Registrar Entrada
-                        </button>
-                    </form>
-                {% else %}
-                    <p class="text-red-600 font-semibold">Você atingiu o limite de registros para hoje.</p>
-                {% endif %}
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white py-4 shadow-inner">
-        <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 Ponto Eletrônico. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script src="{{ url_for('static', filename='scripts/index.js') }}" defer></script>
-    <script>
-        // Capturar a hora no front-end
-        document.querySelectorAll('form').forEach(function(form) {
-            form.addEventListener('submit', function() {
-                const currentTime = new Date().toLocaleTimeString('pt-BR', { hour12: false });
-                const inputHoraRegistro = this.querySelector('input[name="hora_registro"]');
-                inputHoraRegistro.value = currentTime;
-            });
-        });
-
-        // Exibir o relógio
-        function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-        }
-
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 </body>
 </html>
