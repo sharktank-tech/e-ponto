@@ -1,10 +1,10 @@
 /* Estilo base */
 body {
-    font-family: 'Inter', sans-serif; /* Fonte mais moderna */
-    background-color: #f9f9f9; /* Fundo mais claro e neutro */
+    font-family: 'Inter', sans-serif; /* Fonte moderna */
+    background-color: #f9f9f9; /* Fundo claro e neutro */
     color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 0;
 }
 
 /* Títulos */
@@ -124,23 +124,64 @@ form input[type="password"]:focus {
     outline: none;
 }
 
-/* Responsividade */
+/* Responsividade para telas pequenas */
 @media (max-width: 768px) {
     body {
         padding: 10px;
     }
 
+    h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
     table th, table td {
         padding: 10px;
+        font-size: 0.8rem;
     }
 
     button {
-
         width: 100%;
         margin-bottom: 10px;
     }
 
     form {
         padding: 10px;
+    }
+
+    .flex {
+        flex-direction: column;
+    }
+
+    .gap-2 {
+        gap: 8px;
+    }
+
+    .gap-4 {
+        gap: 12px;
+    }
+}
+
+/* Responsividade para dispositivos muito pequenos */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 1rem;
     }
 }

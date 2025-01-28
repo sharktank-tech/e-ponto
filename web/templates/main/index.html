@@ -1,142 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ponto Eletrônico</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="icon" href="{{ url_for('static', filename='images/soco-relogio.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/animation.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/soco-relogio.png') }}">
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
-
-  <!-- Mensagens flash -->
-  <div class="fixed top-0 left-0 w-full z-50">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div id="flash-message" class="bg-green-500 text-white py-2 max-w-md mx-auto rounded-lg shadow-lg flex items-center justify-between">
-          {% for category, message in messages %}
-            <div class="text-center w-full">{{ message }}</div>
-          {% endfor %}
-          <button id="close-flash" class="text-white font-bold px-2">x</button>
-        </div>
-      {% endif %}
-    {% endwith %}
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var flashMessage = document.getElementById('flash-message');
-      var closeButton = document.getElementById('close-flash');
-      if (flashMessage && closeButton) {
-        closeButton.addEventListener('click', function() {
-          flashMessage.remove();
-        });
-      }
-    });
-  </script>
+<body class="bg-gray-100">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow-md">
-    <div class="container mx-auto px-4 py-2 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-red-600">Ponto Eletrônico</h1>
-      <button id="nav-toggle" class="block md:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
-      <ul id="nav-links" class="hidden md:flex space-x-4">
-        <li>
-          <a href="{{ url_for('main.conta') }}" class="text-gray-700 hover:text-red-600" aria-label="Link para a página Conta">Conta</a>
-        </li>
-      </ul>
-    </div>
+  <nav class="bg-black text-white px-4 py-2 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Painel Administrativo</h1>
+    <ul class="flex gap-4">
+      <li><a href="/" class="hover:underline">Home</a></li>
+      <li><a href="{{ url_for('main.logout') }}" class="hover:underline">Sair</a></li>
+    </ul>
   </nav>
 
-  <script>
-    const navToggle = document.getElementById('nav-toggle');
-    const navLinks = document.getElementById('nav-links');
-    navToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('hidden');
-    });
-  </script>
+  <!-- Conteúdo Principal -->
+  <main class="mt-6 px-4 max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Administração</h1>
 
-  <!-- Main Content -->
-  <main id="main-content" class="flex-grow container mx-auto px-4 py-8">
-    <div class="bg-white p-6 rounded-lg shadow-md">
-
-      <!-- Informação sobre o novo dia -->
-      {% if is_new_day %}
-        <p class="text-green-600 font-semibold mb-4">Novo dia iniciado! Registros zerados.</p>
-      {% endif %}
-
-      <!-- Informações do usuário -->
-      <div class="mb-4">
-        <p class="text-lg font-bold">Nome: <span class="font-normal">{{ username }}</span></p>
-        <p class="text-lg font-bold">ID: <span class="font-normal">{{ user_id }}</span></p>
-      </div>
-
-      <!-- Labels para Point Data -->
-      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-        {% for label, data, color, image in [
-          ('Entrada', 'entrada', 'green-400', 'entrada.png'),
-          ('Pausa', 'pausa', 'blue-400', 'xicara-cheia.png'),
-          ('Retorno', 'retorno', 'yellow-400', 'xicara-vazia.png'),
-          ('Saída', 'saida', 'red-400', 'saida.png')
-        ] %}
-        <div class="text-center border border-gray-300 bg-{{ color | default('gray-400') }} p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
-          <img src="{{ url_for('static', filename='images/' ~ image) }}" alt="Ícone de {{ label }}" class="w-12 h-12 mx-auto">
-          <div class="font-semibold mt-2">{{ label }}:</div>
-          <div>{{ point_data[data] if point_data[data] != 'Não registrado' else 'Não registrado' }}</div>
-        </div>
+    <!-- Gerenciar Usuários -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Usuários</h2>
+      <a href="{{ url_for('admin.add_user') }}" class="bg-black text-white py-2 px-4 rounded hover:bg-gray-800 inline-block mb-4">Adicionar Usuário</a>
+      <ul class="space-y-4">
+        {% for user in users %}
+          {% if user %}
+            <li class="bg-white p-4 rounded shadow flex justify-between items-center">
+              <div>
+                <h3 class="text-lg font-bold">{{ user.username }}</h3>
+                <p class="text-gray-600">{{ user.email }}</p>
+              </div>
+              <div class="flex gap-2">
+                <!-- Botão Editar -->
+                <a href="{{ url_for('admin.edit_user', id=user.id) }}" class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">
+                  Editar
+                </a>
+                <!-- Botão Excluir -->
+                <form action="{{ url_for('admin.delete_user', id=user.id) }}" method="post">
+                  <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Excluir</button>
+                </form>
+              </div>
+            </li>
+          {% else %}
+            <li class="bg-white p-4 rounded shadow flex justify-between items-center">
+              <div>
+                <h3 class="text-lg font-bold text-red-500">Usuário Inválido</h3>
+              </div>
+            </li>
+          {% endif %}
         {% endfor %}
-      </div>
-
-      <!-- Relógio -->
-      <div id="clock" class="text-center text-2xl font-bold mb-6" aria-live="polite"></div>
-
-      <!-- Botão para registrar ponto -->
-      <div class="text-center">
-        {% if can_register %}
-          <form id="registro-form" action="{{ url_for('main.registrar_ponto') }}" method="post">
-            <input type="hidden" name="tipo_registro" id="tipo_registro" value="entrada">
-            <input type="hidden" name="hora_registro" id="hora_registro">
-            <button type="submit" id="registrar-button" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none">
-              Registrar Entrada
-            </button>
-          </form>
-        {% else %}
-          <p class="text-red-600 font-semibold">Você atingiu o limite de registros para hoje.</p>
-        {% endif %}
-      </div>
-    </div>
+      </ul>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 py-4 shadow-inner text-white">
-    <div class="container mx-auto px-4 text-center">
-      <p>&copy; 2024 Ponto Eletrônico. Todos os direitos reservados.</p>
-      <div class="mt-2">
-        <a href="#" class="hover:underline text-gray-300">Sobre</a> |
-        <a href="#" class="hover:underline text-gray-300">Política de Privacidade</a> |
-        <a href="#" class="hover:underline text-gray-300">Contato</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- JavaScript -->
-  <script>
-    // Atualizar relógio
-    function updateClock() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
 </body>
 </html>
