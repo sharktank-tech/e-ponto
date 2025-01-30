@@ -25,16 +25,27 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var flashMessage = document.getElementById('flash-message');
-      var closeButton = document.getElementById('close-flash');
-      if (flashMessage && closeButton) {
+  document.addEventListener('DOMContentLoaded', function() {
+    var flashMessage = document.getElementById('flash-message');
+    var closeButton = document.getElementById('close-flash');
+
+    if (flashMessage) {
+      // Remover mensagem após 5 segundos
+      setTimeout(function() {
+        flashMessage.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+        setTimeout(() => flashMessage.remove(), 500); // Remover do DOM após transição
+      }, 5000);
+
+      // Remover ao clicar no botão de fechar
+      if (closeButton) {
         closeButton.addEventListener('click', function() {
           flashMessage.remove();
         });
       }
-    });
+    }
+  });
   </script>
+
 
   <!-- Navbar -->
   <nav class="bg-white shadow-md">
