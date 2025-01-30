@@ -48,7 +48,7 @@
         <!-- Relatório -->
         <section class="bg-white p-6 rounded-lg shadow-md mb-8">
             <h3 class="text-lg font-bold text-gray-700 mb-4">Relatório</h3>
-            <a href="/relatorio" class="text-blue-600 hover:underline">Enviar relatório para o email: {{ user.email }}</a>
+            <a href="/relatorio" class="text-blue-600 hover:underline">Enviar relatório para o e-mail: {{user.email}}</a>
         </section>
 
         <!-- Tabela de Marcações -->
@@ -84,9 +84,14 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-blue-800 text-white py-4">
-        <div class="container mx-auto px-4 text-center text-sm">
-            © 2024 Ponto Eletrônico. Todos os direitos reservados.
+    <footer class="bg-gray-800 py-4 shadow-inner text-white">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Ponto Eletrônico. Todos os direitos reservados.</p>
+                <div class="mt-2">
+                    <a href="#" class="hover:underline text-gray-300">Sobre</a> |
+                    <a href="#" class="hover:underline text-gray-300">Política de Privacidade</a> |
+                    <a href="#" class="hover:underline text-gray-300">Contato</a>
+                </div>
         </div>
     </footer>
 
