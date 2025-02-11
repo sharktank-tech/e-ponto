@@ -162,13 +162,12 @@ def conta():
             email=email,
             horas_trabalhadas=horas_trabalhadas,
             salario=salario,
-            pontos=pontos  # Passa as marcações de ponto para o template
+            pontos=pontos
         )
     except Exception as e:
         flash("Erro ao acessar os dados da conta. Tente novamente.", "danger")
         print(f"Erro ao acessar dados da conta: {e}")
 
-    # Redireciona para a página inicial em caso de erro
     return redirect(url_for('main.home'))
 
 # Rota para editar conta
