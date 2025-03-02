@@ -9,7 +9,8 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates/admin'
 @login_required
 def admin_dashboard():
     users = Users.query.all()
-    return render_template('admin/admin.html', users=users)
+    criado_em = '03/06/2023'
+    return render_template('admin/admin.html', users=users, criado_em=criado_em)
 
 # Adicionar usuário
 @admin_blueprint.route('/admin/users/add', methods=['GET', 'POST'])

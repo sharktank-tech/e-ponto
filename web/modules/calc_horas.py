@@ -37,7 +37,7 @@ def calcular_horas_salario(user_id):
 
         # Calculando o total de horas e salário
         total_horas = sum(horas_por_dia.values())
-        taxa_hora = 17.0  # Exemplo de taxa horária (pode ser configurável)
+        taxa_hora = 17.0
         salario = total_horas * taxa_hora
 
         # Retornando as horas trabalhadas e o salário calculado

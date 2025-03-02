@@ -7,92 +7,70 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="{{ url_for('static', filename='images/soco-relogio.png') }}">
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-50 min-h-screen flex flex-col">
 
   <!-- Navbar -->
-  <nav class="bg-black text-white px-4 py-3 shadow-md">
-    <div class="container mx-auto flex justify-between items-center">
+  <nav class="bg-gray-900 text-white shadow-lg">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
       <h1 class="text-2xl font-bold">Painel Administrativo</h1>
       <ul class="flex gap-6">
-        <li><a href="/" class="hover:underline">Home</a></li>
-        <li><a href="{{ url_for('main.logout') }}" class="hover:underline">Sair</a></li>
+        <li><a href="/" class="hover:text-gray-300 transition duration-200">Home</a></li>
+        <li><a href="{{ url_for('main.logout') }}" class="hover:text-gray-300 transition duration-200">Sair</a></li>
       </ul>
     </div>
   </nav>
 
   <!-- Conteúdo Principal -->
   <main class="flex-grow container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Administração</h1>
-
-    <!-- Gerenciar Usuários -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold text-gray-700 mb-4">Usuários</h2>
-      <a href="{{ url_for('admin.add_user') }}" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 inline-block mb-6">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Administração</h1>
+      <a href="{{ url_for('admin.add_user') }}" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200">
         + Adicionar Usuário
       </a>
+    </div>
+
+    <!-- Gerenciar Usuários -->
+    <section>
+      <h2 class="text-2xl font-semibold text-gray-700 mb-6">Usuários</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for user in users %}
-          <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-            <div class="flex flex-col justify-between h-full">
-              <div>
-                <h3 class="text-xl font-bold text-gray-800">{{ user.username }}</h3>
-                <p class="text-gray-600 mt-2">{{ user.email }}</p>
-                <p class="text-gray-500 text-sm mt-2">
-                  <span class="font-semibold">Criado em:</span> {{ user.created_at.strftime('%d/%m/%Y') }}
-                </p>
-              </div>
+          <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200">
+            <div class="mb-4">
+              <h3 class="text-xl font-bold text-gray-800">{{ user.username }}</h3>
+              <p class="text-gray-600">{{ user.email }}</p>
+            </div>
 
-              <!-- Botões Editar e Excluir -->
-              <div class="mt-6 flex gap-3">
-                <!-- Botão Editar -->
-                <a href="{{ url_for('admin.edit_user', id=user.id) }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition flex-1 text-center">
-                  Editar
-                </a>
-                <!-- Botão Excluir -->
-                <form action="{{ url_for('admin.delete_user', id=user.id) }}" method="post" class="flex-1">
-                  <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition w-full">
-                    Excluir
-                  </button>
-                </form>
-              </div>
+            <!-- Botões Editar e Excluir -->
+            <div class="flex gap-3">
+              <!-- Botão Editar -->
+              <a href="{{ url_for('admin.edit_user', id=user.id) }}" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200 flex-1 text-center">
+                Editar
+              </a>
+              <!-- Botão Excluir -->
+              <form action="{{ url_for('admin.delete_user', id=user.id) }}" method="post" class="flex-1">
+                <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-200 w-full">
+                  Excluir
+                </button>
+              </form>
             </div>
           </div>
         {% else %}
-          <div class="bg-white p-6 rounded-lg shadow-md text-center text-gray-600 col-span-full">
+          <div class="bg-white p-6 rounded-xl shadow-lg text-center text-gray-600 col-span-full">
             Nenhum usuário encontrado.
           </div>
         {% endfor %}
       </div>
     </section>
-
-    <!-- Estatísticas (Exemplo) -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold text-gray-700 mb-4">Estatísticas</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <h3 class="text-xl font-bold text-gray-800">Total de Usuários</h3>
-          <p class="text-3xl font-semibold text-blue-600 mt-2">{{ users|length }}</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <h3 class="text-xl font-bold text-gray-800">Usuários Ativos</h3>
-          <p class="text-3xl font-semibold text-green-600 mt-2">0</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <h3 class="text-xl font-bold text-gray-800">Último Login</h3>
-          <p class="text-3xl font-semibold text-gray-600 mt-2">-</p>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 py-4 shadow-inner text-white">
+  <footer class="bg-gray-900 py-6 text-white">
     <div class="container mx-auto px-4 text-center">
-      <p>&copy; 2024 Ponto Eletrônico. Todos os direitos reservados.</p>
-      <div class="mt-2">
-        <a href="#" class="hover:underline text-gray-300">Sobre</a> |
-        <a href="#" class="hover:underline text-gray-300">Política de Privacidade</a> |
-        <a href="#" class="hover:underline text-gray-300">Contato</a>
+      <p class="text-sm">&copy; 2024 Ponto Eletrônico. Todos os direitos reservados.</p>
+      <div class="mt-2 flex justify-center gap-4">
+        <a href="#" class="text-gray-300 hover:text-white transition duration-200">Sobre</a>
+        <a href="#" class="text-gray-300 hover:text-white transition duration-200">Política de Privacidade</a>
+        <a href="#" class="text-gray-300 hover:text-white transition duration-200">Contato</a>
       </div>
     </div>
   </footer>
