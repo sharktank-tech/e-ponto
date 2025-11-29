@@ -16,7 +16,7 @@ logging.basicConfig(filename='debug.log',level=logging.INFO,
         format='%(asctime)s [%(levelname)s] (%(threadName)-10s) %(message)s')
 
 @main_blueprint.route('/')
-@login_required
+#@login_required
 def home():
     # Obtém a data de hoje no formato 'DD/MM/YYYY'
     hoje = obter_data_hora_br()
