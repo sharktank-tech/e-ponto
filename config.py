@@ -1,5 +1,7 @@
+import os
+
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:CVpzgCayjsiHumFpyUgQnxZZboECenGw@viaduct.proxy.rlwy.net:28248/railway'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = '39fscnekito993hntkgkd943hnr9(('
-    FLASK_APP = 'run'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///db.sqlite3'
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS')
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+    FLASK_APP = os.environ.get('FLASK_APP')
