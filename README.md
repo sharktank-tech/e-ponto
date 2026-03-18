@@ -44,3 +44,11 @@ Acesse a aplicação: [e-ponto-eight.vercel.app](https://e-ponto-delta.vercel.ap
    ```bash
    git clone https://github.com/sharktank-tech/e-ponto
    cd e-ponto
+2. **Crie o ambiente virtual:**
+   ```bash
+    python3 -m venv .venv
+3. **Atuve o ambiente:**
+   ```bash
+    source .venv/bin/activate
+4. **Acesse sua aplicação:**
+   http://127.0.0.0:8000 
