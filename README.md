@@ -1,13 +1,13 @@
-# E-Ponto 🕒
+# E-Ponto
 
 O **E-Ponto** é uma aplicação de gestão de ponto eletrônico, desenvolvida para facilitar o controle de jornada de trabalho dos colaboradores. Com funcionalidades intuitivas e integração com banco de dados PostgreSQL, o sistema permite marcações como entrada, pausa, retorno e saída de forma eficiente. A aplicação foi projetada para ser simples, responsiva e fácil de usar.
 
-## 🌐 Demonstração
+## Demonstração
 Acesse a aplicação: [e-ponto-eight.vercel.app](https://e-ponto-delta.vercel.app/)
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - **Registro de Ponto:** Entrada, pausa, retorno e saída com controle automatizado.
 - **Envio de Emails:** Notificações automáticas por email para usuários e administradores.
@@ -19,7 +19,7 @@ Acesse a aplicação: [e-ponto-eight.vercel.app](https://e-ponto-delta.vercel.ap
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Backend:** Flask (Python)
 - **Banco de Dados:** PostgreSQL
@@ -30,7 +30,7 @@ Acesse a aplicação: [e-ponto-eight.vercel.app](https://e-ponto-delta.vercel.ap
 
 ---
 
-## 📋 Configuração do Projeto
+## Configuração do Projeto
 
 ### Pré-requisitos
 
