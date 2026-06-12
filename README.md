@@ -50,7 +50,7 @@ Acesse a aplicação: [e-ponto-eight.vercel.app](https://e-ponto-delta.vercel.ap
 3. **Atuve o ambiente:**
    ```bash
     source .venv/bin/activate
-4. **Atuve o ambiente:**
+4. **Execute o arquivo principal para subir o servidor localmente:**
    ```bash
     python run.py
 5. **Acesse sua aplicação:**
