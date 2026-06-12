@@ -50,5 +50,8 @@ Acesse a aplicação: [e-ponto-eight.vercel.app](https://e-ponto-delta.vercel.ap
 3. **Atuve o ambiente:**
    ```bash
     source .venv/bin/activate
-4. **Acesse sua aplicação:**
+4. **Atuve o ambiente:**
+   ```bash
+    python run.py
+5. **Acesse sua aplicação:**
    http://127.0.0.0:8000 
